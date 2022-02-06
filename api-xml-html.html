@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <table>
+        <thead>
+            <th>name</th>
+            <th>email</th>
+            <th>city</th>
+            <th>phone</th>
+        </thead>
+        <tbody id= id-table-body>
+
+        </tbody>
+
+    </table>
+    
+</body>
+<script>
+    // to fetch and display a data in html via js we can use XML and JSON classes..
+    // in XML method we call XMLHttprequest() class and its inside objects and methods to obtain the desired result in string format
+    // we then use json method to convert the obtained string into objects
+    // q) display the data from users api from this link https://jsonplaceholder.typicode.com/users
+
+//step 1: calling of XMLHttprequest() class by making an object from it using classic programming
+var request = new XMLHttpRequest()
+
+// step 2: use open method from XMLHttprequest class to feed type of http request(get) and api's url to obtain the data from the api url
+request.open("get", "https://jsonplaceholder.typicode.com/users")
+
+// step3: use send method of XMLHttpRequest() class to send the get request to api url
+
+request.send() // to see if request is success.. goto browser console.. type request .. check the parameters onreadystatechange, readystate, status, responseText.. paramater values are..
+// onreadystatechange = null,..
+// readystate = 4 (4 means our request was send and a reply was obtained. if no request is send it'll be 1)
+// status = 200 (can be any value from 199 to 299 and it means success)
+// responseText = data from api as pure string format
+
+// step4: to display api data as string on console (we don't want it as string, we want it as objects, we'll convert it later)
+request.onreadystatechange = () => {
+    if (request.readyState == 4) {
+        if(request.status > 199 && request.status < 300) {
+            console.log(request.responseText) // displays api data from response objest of XMLHttpRequest() class in string format
+            // if data is not displayed on console, click log tab, data will be displayed there.
+
+// step5:now  to convert the api data from string to objects
+
+            var api_data = JSON.parse(request.responseText) // converts the responseText data from string type to object type
+            console.log(api_data)
+            console.log(typeof(api_data)) // shows variable api data is an object so operations is only possible only if it is converted to array
+            // now in browser console, type api_data_as_object_format to see api data as an array of objects.
+            // now we can do array and object operations on it.
+
+// step 6: to populate name, email, city , and phone number into a table
+            table_data(api_data)
+        } else {
+            console.log("data fetching failed")
+        }
+    }
+}
+
+function table_data(function_parameter) {
+    let table_data = ``
+    function_parameter.forEach( e => {
+        let name = e.name
+        let email = e.email
+        let city = e.address.city
+        let phone = e.phone
+        
+        table_data += `<tr>
+            <td>${name}</td>
+            <td>${email}</td>
+            <td>${city}</td>
+            <td>${phone}</td>
+            
+            </tr>`
+
+            
+    })
+
+    document.querySelector("#id-table-body").innerHTML = table_data
+
+}
+
+ 
+
+
+</script>
+</html>
